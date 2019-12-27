@@ -1,0 +1,18 @@
+.posts-feed-container{
+  width: 640px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.post-container{
+  min-height: 100px;
+  width: 100%;
+  h2{
+    font-size: 20px;
+  }
+  .description{
+    font-size: 14px;
+    color: gray;
+
+  }
+}
