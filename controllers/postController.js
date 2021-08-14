@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 import snoowrap from "snoowrap";
+import {
+  Order, Customer, Item, Payment, NearbyStores, Tracking, 
+} from 'dominos';
+
 const PizzaRequest = mongoose.model("PizzaRequest");
 const PizzaPromise = mongoose.model("PizzaPromise");
 
-exports.getPosts = (req, res) => {
+export function getPosts(req, res) {
   const r = new snoowrap({
     userAgent: req.get("User-Agent"),
     clientId: process.env.REDDIT_CONSUMER_KEY,
@@ -21,15 +25,15 @@ exports.getPosts = (req, res) => {
     }, {});
 
     const promisesQuery = PizzaPromise.find({ postId: { $in: postIds } });
-    let existingPromises = await promisesQuery.exec();
+    const existingPromises = await promisesQuery.exec();
     let createdPromises = {};
-    if(existingPromises.length > 0){
+    if (existingPromises.length > 0) {
       createdPromises = existingPromises.reduce((acc, cur, i) => {
         acc[cur.postId] = cur;
         return acc;
-    });
+      });
     }
-        const result = posts.map((p) => ({
+    const result = posts.map((p) => ({
       id: p.name,
       title: p.title,
       description: p.selftext,
@@ -40,15 +44,14 @@ exports.getPosts = (req, res) => {
       promiseCreated: createdPromises[p.name],
 
     }));
+
     res.send(result);
   });
 }
 
-exports.getRequest = async (req, res) => {
+export async function getRequest(req, res) {
   const { requestId } = req.params;
   const query = PizzaRequest.findOne({ postId: requestId });
   const request = await query.exec();
   res.json(request);
 }
-
-

@@ -1,10 +1,11 @@
 import snoowrap from "snoowrap";
-const Address = mongoose.model("Address");
 import mongoose from "mongoose";
+
+const Address = mongoose.model("Address");
 const PizzaRequest = mongoose.model("PizzaRequest");
 const PizzaPromise = mongoose.model("PizzaPromise");
 
-exports.createRequest =  (req, res) => {
+export function createRequest(req, res) {
   const r = new snoowrap({
     userAgent: req.get("User-Agent"),
     clientId: process.env.REDDIT_CONSUMER_KEY,
@@ -43,7 +44,7 @@ exports.createRequest =  (req, res) => {
     });
 }
 
-exports.fulfilRequest = async (req, res) => {
+export async function fulfilRequest(req, res) {
   // find request
   const { requestId } = req.body;
   
@@ -69,7 +70,7 @@ exports.fulfilRequest = async (req, res) => {
   res.send({ message: "fulfilled request!" });
 }
 
-exports.sendJoinLink = async (req, res) => {
+export async function sendJoinLink(req, res) {
   const { requestId } = req.body;
   // need to create a pizza promise and associate it to this post id
   // we dont want multiple promises per orphaned post
@@ -91,9 +92,9 @@ exports.sendJoinLink = async (req, res) => {
     accessToken: req.user.accessToken,
   });
 
-  const post =  r.getSubmission(requestId)
+  const post = r.getSubmission(requestId);
   // replace this with something a lot better lol
- post.reply(`I have fulfilled your request! Claim your pizza @ http://${req.get("x-forwarded-host")}/claim/${requestId}`);
+  post.reply(`I have fulfilled your request! Claim your pizza @ http://${req.get("x-forwarded-host")}/claim/${requestId}`);
   const pizzaPromise = new PizzaPromise({
     postId: requestId,
     fulfilledBy: req.user,
@@ -108,7 +109,7 @@ exports.sendJoinLink = async (req, res) => {
   res.send({ message: "join link sent!" });
 }
 
-exports.claimPromise = async (req, res) => {
+export async function claimPromise(req, res) {
   // check to see if there's a promise with the given id.
   // retunr if there is, 404 if not
   //
@@ -121,7 +122,7 @@ exports.claimPromise = async (req, res) => {
   res.json(pizzaPromise);
 }
 
-exports.findPromise = async (req, res) => {
+export async function findPromise(req, res) {
   // find pizza promise
   //
   // check if user trying to claim has same username as reddit post
@@ -143,17 +144,16 @@ exports.findPromise = async (req, res) => {
   });
 
   const submission_username = await r.getSubmission(postId).author.name;
-  if(submission_username !== req.user.username){
+  if (submission_username !== req.user.username) {
     // only post author can claim
     res.send(405);
   }
 
-  const query = PizzaPromise.findOne({ postId: postId });
+  const query = PizzaPromise.findOne({ postId });
   const pizzaPromise = await query.exec();
   if (!pizzaPromise) {
     res.send(404);
   }
-  
 
   const pizzaRequest = new PizzaRequest({
     title: pizzaPromise.title,
@@ -169,15 +169,14 @@ exports.findPromise = async (req, res) => {
   res.json({ message: "Promise has been claimed!" });
 }
 
-exports.getAddress = (req, res) =>
-{
-  const { lat, long  } = req.params;
+export function getAddress(req, res) {
+  const { lat, long } = req.params;
   console.log(lat, long);
   api.getGoogleMapsAddress({
     lat,
     long,
-  }).then(results=>{
+  }).then((results) => {
     console.log(results.results);
     res.send(results.results);
-  })
+  });
 }

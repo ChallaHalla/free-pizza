@@ -6,13 +6,13 @@ import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
-import "./db";
+import "./db.js";
 import "./config/passportConfig.js";
 
-import * as userController from "./controllers/userController";
-import * as requestController from "./controllers/requestController";
-import * as postController from "./controllers/postController";
-import * as middleware from "./services/middleware";
+import * as userController from "./controllers/userController.js";
+import * as requestController from "./controllers/requestController.js";
+import * as postController from "./controllers/postController.js";
+import * as middleware from "./services/middleware.js";
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(methodOverride());
 
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
 app.use(session({ secret: "keyboard cat" }));
 app.use(passport.initialize());
 app.use(passport.session());

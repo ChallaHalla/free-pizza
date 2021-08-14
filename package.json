@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
     "babel-eslint": "^10.0.3",
@@ -6,6 +7,7 @@
     "bulma": "^0.8.0",
     "cookie-parser": "^1.4.4",
     "crypto": "^1.0.1",
+    "dominos": "^3.3.0",
     "dotenv": "^8.2.0",
     "ejs": "^2.7.4",
     "eslint": "^6.8.0",

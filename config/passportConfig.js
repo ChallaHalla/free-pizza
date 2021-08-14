@@ -1,7 +1,10 @@
 import passport from "passport";
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import mongoose from "mongoose";
-const RedditStrategy = require("passport-reddit").Strategy;
+import passportReddit from "passport-reddit";
+
+const RedditStrategy = passportReddit.Strategy;
+
 const User = mongoose.model("User");
 
 dotenv.config();
@@ -15,7 +18,6 @@ passport.deserializeUser((id, done) => {
     done(null, user);
   });
 });
-
 
 passport.use(new RedditStrategy({
   clientID: process.env.REDDIT_CONSUMER_KEY,
@@ -44,5 +46,3 @@ passport.use(new RedditStrategy({
     return done(err, user);
   });
 })));
-
-

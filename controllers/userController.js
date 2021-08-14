@@ -1,15 +1,14 @@
 import passport from "passport";
 import mongoose from "mongoose";
-import * as converter from "./../services/conversions";
+import * as converter from "../services/conversions.js";
 
 const { utf8ToBase64, base64ToUtf8 } = converter;
 const User = mongoose.model("User");
 
-
 //   Note that the 'state' option is a Reddit-specific requirement.
-exports.redditLogin = (req, res, next) => {
+export function redditLogin(req, res, next) {
   // set redirect info here
-  req.session.state = req.query.state || utf8ToBase64("{}")
+  req.session.state = req.query.state || utf8ToBase64("{}");
   passport.authenticate("reddit", {
     state: req.session.state,
     duration: 'permanent',
@@ -23,7 +22,7 @@ exports.redditLogin = (req, res, next) => {
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-exports.redditLoginCallback = (req, res, next) => {
+export function redditLoginCallback(req, res, next) {
   // Check for origin via state token
   const encodedState = req.query.state;
   const state = JSON.parse(base64ToUtf8(encodedState));
