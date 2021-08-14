@@ -9,9 +9,9 @@ import methodOverride from "method-override";
 import "./db.js";
 import "./config/passportConfig.js";
 
-import * as userController from "./controllers/userController.js";
-import * as requestController from "./controllers/requestController.js";
-import * as postController from "./controllers/postController.js";
+import * as usersController from "./controllers/usersController.js";
+import * as requestsController from "./controllers/requestsController.js";
+import * as postsController from "./controllers/postsController.js";
 import * as middleware from "./services/middleware.js";
 
 const app = express();
@@ -33,20 +33,20 @@ app.use(passport.session());
 const { ensureAuthenticated } = middleware;
 
 // user controller
-app.get("/auth/reddit", userController.redditLogin);
-app.get("/auth/reddit/callback", userController.redditLoginCallback);
+app.get("/auth/reddit", usersController.redditLogin);
+app.get("/auth/reddit/callback", usersController.redditLoginCallback);
 
 // request controller
-app.post("/createRequest", ensureAuthenticated, requestController.createRequest);
-app.post("/fulfilRequest", ensureAuthenticated, requestController.fulfilRequest);
-app.get("/getStreetAddress/:lat/:long", ensureAuthenticated, requestController.getAddress);
+app.post("/createRequest", ensureAuthenticated, requestsController.createRequest);
+app.post("/fulfilRequest", ensureAuthenticated, requestsController.fulfilRequest);
+app.get("/getStreetAddress/:lat/:long", ensureAuthenticated, requestsController.getAddress);
 
-// postController
-app.get("/getPosts", ensureAuthenticated, postController.getPosts);
-app.get("/getRequest/:requestId", ensureAuthenticated, postController.getRequest);
-app.post("/sendJoinLink", ensureAuthenticated, requestController.sendJoinLink);
-app.get("/claim/:requestId", ensureAuthenticated, requestController.claimPromise);
-app.post("/claim", ensureAuthenticated, requestController.findPromise);
+// postsController
+app.get("/getPosts", ensureAuthenticated, postsController.getPosts);
+app.get("/getRequest/:requestId", ensureAuthenticated, postsController.getRequest);
+app.post("/sendJoinLink", ensureAuthenticated, requestsController.sendJoinLink);
+app.get("/claim/:requestId", ensureAuthenticated, requestsController.claimPromise);
+app.post("/claim", ensureAuthenticated, requestsController.findPromise);
 
 app.get("/", (req, res) => {
   res.redirect("http://localhost:3000/posts");

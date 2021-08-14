@@ -19,13 +19,13 @@ const PizzaRequestSchema = {
   createdAt: { type: Date, default: Date.now },
   
   // address info
-  address: ObjectId, 
+  address: { type: ObjectId, ref: "Address" }, 
 //  perhaps include requested order
 };
 
 const PizzaPromiseSchema = {
   postId: { type: String },
-  // if refers to redditId
+  // id refers to redditId
   fulfilledBy: { type: ObjectId, ref: 'User' },
   createdAt: { type: Date, default: Date.now },
 };
@@ -33,8 +33,10 @@ const PizzaPromiseSchema = {
 const AddressSchema = {
   streetAddress: { type: String },
   zipcode: { type: String },
+  city: { type: String },
   state: { type: String },
   apt: { type: String },
+  userId: { type: ObjectId, ref: "User" },
 };
 
 const dbconf = 'mongodb://localhost/free-pizza';
