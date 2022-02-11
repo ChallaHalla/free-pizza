@@ -7,7 +7,7 @@
     "eslint": "^6.7.0",
     "fetch": "^1.1.0",
     "node-fetch": "^2.6.1",
-    "node-sass": "4.14.1",
+    "node-sass": "7.0.0",
     "query-string": "^6.9.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
